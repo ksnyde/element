@@ -28,7 +28,8 @@
         v-model="model"
         @focus="focus = true"
         @blur="focus = false"
-        @change="handleChange"
+        @click="handleChange"
+        @touchend="handleChange"
         :name="name"
         :disabled="isDisabled"
         tabindex="-1"
@@ -41,86 +42,95 @@
   </label>
 </template>
 <script>
-  import Emitter from 'element-ui/src/mixins/emitter';
+import Emitter from 'element-ui/src/mixins/emitter';
 
-  export default {
-    name: 'ElRadio',
+export default {
+  name: 'ElRadio',
 
-    mixins: [Emitter],
+  mixins: [Emitter],
 
-    inject: {
-      elFormItem: {
-        default: ''
-      }
-    },
-
-    componentName: 'ElRadio',
-
-    props: {
-      value: {},
-      label: {},
-      disabled: Boolean,
-      name: String,
-      border: Boolean,
-      size: String
-    },
-
-    data() {
-      return {
-        focus: false
-      };
-    },
-    computed: {
-      isGroup() {
-        let parent = this.$parent;
-        while (parent) {
-          if (parent.$options.componentName !== 'ElRadioGroup') {
-            parent = parent.$parent;
-          } else {
-            this._radioGroup = parent;
-            return true;
-          }
-        }
-        return false;
-      },
-      model: {
-        get() {
-          return this.isGroup ? this._radioGroup.value : this.value;
-        },
-        set(val) {
-          if (this.isGroup) {
-            this.dispatch('ElRadioGroup', 'input', [val]);
-          } else {
-            this.$emit('input', val);
-          }
-        }
-      },
-      _elFormItemSize() {
-        return (this.elFormItem || {}).elFormItemSize;
-      },
-      radioSize() {
-        const temRadioSize = this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
-        return this.isGroup
-          ? this._radioGroup.radioGroupSize || temRadioSize
-          : temRadioSize;
-      },
-      isDisabled() {
-        return this.isGroup
-          ? this._radioGroup.disabled || this.disabled
-          : this.disabled;
-      },
-      tabIndex() {
-        return !this.isDisabled ? (this.isGroup ? (this.model === this.label ? 0 : -1) : 0) : -1;
-      }
-    },
-
-    methods: {
-      handleChange() {
-        this.$nextTick(() => {
-          this.$emit('change', this.model);
-          this.isGroup && this.dispatch('ElRadioGroup', 'handleChange', this.model);
-        });
-      }
+  inject: {
+    elFormItem: {
+      default: ''
     }
-  };
+  },
+
+  componentName: 'ElRadio',
+
+  props: {
+    value: {},
+    label: {},
+    disabled: Boolean,
+    name: String,
+    border: Boolean,
+    size: String
+  },
+
+  data() {
+    return {
+      focus: false
+    };
+  },
+  computed: {
+    isGroup() {
+      let parent = this.$parent;
+      while (parent) {
+        if (parent.$options.componentName !== 'ElRadioGroup') {
+          parent = parent.$parent;
+        } else {
+          this._radioGroup = parent;
+          return true;
+        }
+      }
+      return false;
+    },
+    model: {
+      get() {
+        return this.isGroup ? this._radioGroup.value : this.value;
+      },
+      set(val) {
+        if (this.isGroup) {
+          this.dispatch('ElRadioGroup', 'input', [val]);
+        } else {
+          this.$emit('input', val);
+        }
+      }
+    },
+    _elFormItemSize() {
+      return (this.elFormItem || {}).elFormItemSize;
+    },
+    radioSize() {
+      const temRadioSize =
+        this.size || this._elFormItemSize || (this.$ELEMENT || {}).size;
+      return this.isGroup
+        ? this._radioGroup.radioGroupSize || temRadioSize
+        : temRadioSize;
+    },
+    isDisabled() {
+      return this.isGroup
+        ? this._radioGroup.disabled || this.disabled
+        : this.disabled;
+    },
+    tabIndex() {
+      return !this.isDisabled
+        ? this.isGroup ? (this.model === this.label ? 0 : -1) : 0
+        : -1;
+    }
+  },
+
+  methods: {
+    handleChange() {
+      this.$nextTick(() => {
+        if (this.model === this.label) {
+          this.$emit('clear', this.model);
+          this.isGroup && this.dispatch('ElRadioGroup', 'handleClear');
+        } else {
+          this.$emit('change', this.model);
+          this.isGroup &&
+            this.dispatch('ElRadioGroup', 'handleChange', this.model);
+        }
+      });
+    }
+  }
+};
 </script>

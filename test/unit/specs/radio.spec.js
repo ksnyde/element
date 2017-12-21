@@ -7,17 +7,20 @@ describe('Radio', () => {
   });
 
   it('create', done => {
-    vm = createVue({
-      template: `
+    vm = createVue(
+      {
+        template: `
         <el-radio v-model="radio" label="a">
         </el-radio>
       `,
-      data() {
-        return {
-          radio: ''
-        };
-      }
-    }, true);
+        data() {
+          return {
+            radio: ''
+          };
+        }
+      },
+      true
+    );
     let radioElm = vm.$el;
     expect(radioElm.classList.contains('el-radio')).to.be.true;
     radioElm.click();
@@ -27,8 +30,9 @@ describe('Radio', () => {
     }, 10);
   });
   it('disabled', done => {
-    vm = createVue({
-      template: `
+    vm = createVue(
+      {
+        template: `
         <el-radio
           v-model="radio"
           label="3"
@@ -36,12 +40,14 @@ describe('Radio', () => {
         >
         </el-radio>
       `,
-      data() {
-        return {
-          radio: ''
-        };
-      }
-    }, true);
+        data() {
+          return {
+            radio: ''
+          };
+        }
+      },
+      true
+    );
     let radioElm = vm.$el;
     radioElm.click();
     setTimeout(_ => {
@@ -51,8 +57,9 @@ describe('Radio', () => {
     }, 10);
   });
   it('change event', done => {
-    vm = createVue({
-      template: `
+    vm = createVue(
+      {
+        template: `
         <el-radio
           v-model="radio"
           label="3"
@@ -60,18 +67,20 @@ describe('Radio', () => {
         >
         </el-radio>
       `,
-      data() {
-        return {
-          radio: '',
-          data: ''
-        };
-      },
-      methods: {
-        handleChange(val) {
-          this.data = val;
+        data() {
+          return {
+            radio: '',
+            data: ''
+          };
+        },
+        methods: {
+          handleChange(val) {
+            this.data = val;
+          }
         }
-      }
-    }, true);
+      },
+      true
+    );
     let radioElm = vm.$el;
     radioElm.click();
     setTimeout(_ => {
@@ -80,8 +89,9 @@ describe('Radio', () => {
     }, 10);
   });
   it('change event only triggers on user input', done => {
-    vm = createVue({
-      template: `
+    vm = createVue(
+      {
+        template: `
         <el-radio
           v-model="radio"
           label="3"
@@ -89,18 +99,20 @@ describe('Radio', () => {
         >
         </el-radio>
       `,
-      data() {
-        return {
-          radio: '',
-          data: ''
-        };
-      },
-      methods: {
-        handleChange(val) {
-          this.data = val;
+        data() {
+          return {
+            radio: '',
+            data: ''
+          };
+        },
+        methods: {
+          handleChange(val) {
+            this.data = val;
+          }
         }
-      }
-    }, true);
+      },
+      true
+    );
     vm.radio = '3';
     setTimeout(_ => {
       expect(vm.data).to.equal('');
@@ -109,20 +121,23 @@ describe('Radio', () => {
   });
   describe('Radio group', () => {
     it('create', done => {
-      vm = createVue({
-        template: `
+      vm = createVue(
+        {
+          template: `
           <el-radio-group v-model="radio">
             <el-radio :label="3" ref="radio1">备选项</el-radio>
             <el-radio :label="6" ref="radio2">备选项</el-radio>
             <el-radio :label="9">备选项</el-radio>
           </el-radio-group>
         `,
-        data() {
-          return {
-            radio: 3
-          };
-        }
-      }, true);
+          data() {
+            return {
+              radio: 3
+            };
+          }
+        },
+        true
+      );
       setTimeout(_ => {
         expect(vm.$refs.radio1.$el.querySelector('.is-checked')).to.be.ok;
         let radioElm = vm.$refs.radio2.$el;
@@ -135,22 +150,27 @@ describe('Radio', () => {
       }, 50);
     });
     it('disabled', done => {
-      vm = createVue({
-        template: `
+      vm = createVue(
+        {
+          template: `
           <el-radio-group v-model="radio" disabled>
             <el-radio :label="3" ref="radio1">备选项</el-radio>
             <el-radio :label="6" ref="radio2">备选项</el-radio>
             <el-radio :label="9">备选项</el-radio>
           </el-radio-group>
         `,
-        data() {
-          return {
-            radio: 3
-          };
-        }
-      }, true);
+          data() {
+            return {
+              radio: 3
+            };
+          }
+        },
+        true
+      );
       let radio2 = vm.$refs.radio2;
-      expect(vm.$el.querySelectorAll('label.is-disabled').length).to.be.equal(3);
+      expect(vm.$el.querySelectorAll('label.is-disabled').length).to.be.equal(
+        3
+      );
       expect(vm.$refs.radio1.$el.querySelector('.is-checked')).to.be.exist;
       radio2.$el.click();
       setTimeout(_ => {
@@ -160,26 +180,29 @@ describe('Radio', () => {
       }, 10);
     });
     it('change event', done => {
-      vm = createVue({
-        template: `
+      vm = createVue(
+        {
+          template: `
           <el-radio-group v-model="radio" @change="onChange">
             <el-radio :label="3">备选项</el-radio>
             <el-radio :label="6" ref="radio2">备选项</el-radio>
             <el-radio :label="9">备选项</el-radio>
           </el-radio-group>
         `,
-        methods: {
-          onChange(val) {
-            this.data = val;
+          methods: {
+            onChange(val) {
+              this.data = val;
+            }
+          },
+          data() {
+            return {
+              radio: 3,
+              data: 0
+            };
           }
         },
-        data() {
-          return {
-            radio: 3,
-            data: 0
-          };
-        }
-      }, true);
+        true
+      );
       let radio2 = vm.$refs.radio2;
       radio2.$el.click();
       setTimeout(_ => {
@@ -188,26 +211,29 @@ describe('Radio', () => {
       }, 10);
     });
     it('change event only triggers on user input', done => {
-      vm = createVue({
-        template: `
+      vm = createVue(
+        {
+          template: `
           <el-radio-group v-model="radio" @change="onChange">
             <el-radio :label="3">备选项</el-radio>
             <el-radio :label="6">备选项</el-radio>
             <el-radio :label="9">备选项</el-radio>
           </el-radio-group>
         `,
-        methods: {
-          onChange(val) {
-            this.data = val;
+          methods: {
+            onChange(val) {
+              this.data = val;
+            }
+          },
+          data() {
+            return {
+              radio: 3,
+              data: 0
+            };
           }
         },
-        data() {
-          return {
-            radio: 3,
-            data: 0
-          };
-        }
-      }, true);
+        true
+      );
       vm.radio = 6;
       setTimeout(_ => {
         expect(vm.data).to.equal(0);
@@ -215,20 +241,23 @@ describe('Radio', () => {
       }, 10);
     });
     it('disabled when children is radio button', done => {
-      vm = createVue({
-        template: `
+      vm = createVue(
+        {
+          template: `
           <el-radio-group v-model="radio" disabled>
             <el-radio-button :label="3" ref="radio1">备选项</el-radio-button>
             <el-radio-button :label="6" ref="radio2">备选项</el-radio-button>
             <el-radio-button :label="9">备选项</el-radio-button>
           </el-radio-group>
         `,
-        data() {
-          return {
-            radio: 3
-          };
-        }
-      }, true);
+          data() {
+            return {
+              radio: 3
+            };
+          }
+        },
+        true
+      );
       let radio2 = vm.$refs.radio2;
       expect(vm.$el.querySelectorAll('.is-disabled').length).to.be.equal(3);
       expect(vm.$refs.radio1.$el.classList.contains('is-active')).to.be.true;
@@ -241,20 +270,23 @@ describe('Radio', () => {
     });
     describe('Radio Button', () => {
       it('create', done => {
-        vm = createVue({
-          template: `
+        vm = createVue(
+          {
+            template: `
             <el-radio-group v-model="radio">
               <el-radio-button :label="3" ref="radio1">备选项</el-radio-button>
               <el-radio-button :label="6" ref="radio2">备选项</el-radio-button>
               <el-radio-button :label="9">备选项</el-radio-button>
             </el-radio-group>
           `,
-          data() {
-            return {
-              radio: 3
-            };
-          }
-        }, true);
+            data() {
+              return {
+                radio: 3
+              };
+            }
+          },
+          true
+        );
         expect(vm.$refs.radio1.$el.classList.contains('is-active')).to.be.true;
         let radio = vm.$refs.radio2;
         radio.$el.click();
@@ -265,20 +297,23 @@ describe('Radio', () => {
         }, 10);
       });
       it('custom color', done => {
-        vm = createVue({
-          template: `
+        vm = createVue(
+          {
+            template: `
             <el-radio-group v-model="radio" fill="#000" text-color="#ff0">
               <el-radio-button :label="3" ref="radio1">备选项</el-radio-button>
               <el-radio-button :label="6" ref="radio2">备选项</el-radio-button>
               <el-radio-button :label="9">备选项</el-radio-button>
             </el-radio-group>
           `,
-          data() {
-            return {
-              radio: 3
-            };
-          }
-        }, true);
+            data() {
+              return {
+                radio: 3
+              };
+            }
+          },
+          true
+        );
         setTimeout(_ => {
           expect(vm.$refs.radio1.activeStyle.backgroundColor).to.equal('#000');
           expect(vm.$refs.radio1.activeStyle.borderColor).to.equal('#000');
@@ -287,26 +322,29 @@ describe('Radio', () => {
         }, 10);
       });
       it('change event', done => {
-        vm = createVue({
-          template: `
+        vm = createVue(
+          {
+            template: `
             <el-radio-group v-model="radio" @change="onChange">
               <el-radio-button :label="3">备选项</el-radio-button>
               <el-radio-button :label="6" ref="radio2">备选项</el-radio-button>
               <el-radio-button :label="9">备选项</el-radio-button>
             </el-radio-group>
           `,
-          methods: {
-            onChange(val) {
-              this.data = val;
+            methods: {
+              onChange(val) {
+                this.data = val;
+              }
+            },
+            data() {
+              return {
+                data: 0,
+                radio: 3
+              };
             }
           },
-          data() {
-            return {
-              data: 0,
-              radio: 3
-            };
-          }
-        }, true);
+          true
+        );
         let radio = vm.$refs.radio2;
         radio.$el.click();
         setTimeout(_ => {
@@ -315,26 +353,29 @@ describe('Radio', () => {
         }, 10);
       });
       it('change event only triggers on user input', done => {
-        vm = createVue({
-          template: `
+        vm = createVue(
+          {
+            template: `
             <el-radio-group v-model="radio" @change="onChange">
               <el-radio-button :label="3">备选项</el-radio-button>
               <el-radio-button :label="6" ref="radio2">备选项</el-radio-button>
               <el-radio-button :label="9">备选项</el-radio-button>
             </el-radio-group>
           `,
-          methods: {
-            onChange(val) {
-              this.data = val;
+            methods: {
+              onChange(val) {
+                this.data = val;
+              }
+            },
+            data() {
+              return {
+                data: 0,
+                radio: 3
+              };
             }
           },
-          data() {
-            return {
-              data: 0,
-              radio: 3
-            };
-          }
-        }, true);
+          true
+        );
         vm.radio = 6;
         setTimeout(_ => {
           expect(vm.data).to.equal(0);
@@ -342,22 +383,27 @@ describe('Radio', () => {
         }, 10);
       });
       it('size', done => {
-        vm = createVue({
-          template: `
+        vm = createVue(
+          {
+            template: `
             <el-radio-group v-model="radio" size="large">
               <el-radio-button :label="3" ref="radio1">备选项</el-radio-button>
               <el-radio-button :label="6" ref="radio2">备选项</el-radio-button>
               <el-radio-button :label="9">备选项</el-radio-button>
             </el-radio-group>
           `,
-          data() {
-            return {
-              radio: 3
-            };
-          }
-        }, true);
+            data() {
+              return {
+                radio: 3
+              };
+            }
+          },
+          true
+        );
         setTimeout(_ => {
-          expect(vm.$el.querySelectorAll('.el-radio-button--large').length).to.be.equal(3);
+          expect(
+            vm.$el.querySelectorAll('.el-radio-button--large').length
+          ).to.be.equal(3);
           done();
         }, 10);
       });
